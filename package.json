@@ -1,0 +1,19 @@
+{
+  "name": "abrinay-multiagente",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w apps/agent-system\" \"npm run dev -w apps/office-3d\"",
+    "dev:backend": "npm run dev -w apps/agent-system",
+    "dev:frontend": "npm run dev -w apps/office-3d",
+    "build": "npm run build -w packages/shared-types && npm run build -w apps/agent-system && npm run build -w apps/office-3d"
+  },
+  "devDependencies": {
+    "concurrently": "^8",
+    "typescript": "^5"
+  }
+}

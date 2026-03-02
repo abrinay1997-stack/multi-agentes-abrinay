@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY\" && npm install 2>&1)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY/apps/agent-system\" && npx tsc --noEmit 2>&1)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY\" && npm install --save-dev @types/node-cron -w apps/agent-system 2>&1)",
+      "Bash(true:*)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY/apps/agent-system\" && npx tsx -e \"\nimport { getDb } from './src/db/client'\nconst db = getDb\\(\\)\ndb.prepare\\('DELETE FROM run_lock'\\).run\\(\\)\nconsole.log\\('Lock liberado'\\)\n\" 2>&1)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY/apps/agent-system\" && node -e \"\nconst Database = require\\('better-sqlite3'\\)\nconst path = require\\('path'\\)\nconst db = new Database\\(path.join\\(__dirname, 'data/abrinay.db'\\)\\)\ndb.prepare\\('DELETE FROM run_lock'\\).run\\(\\)\nconsole.log\\('Lock liberado. Filas en squad_outputs:', db.prepare\\('SELECT COUNT\\(*\\) as n FROM squad_outputs'\\).get\\(\\).n\\)\n\" 2>&1)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY/apps/agent-system\" && node -e \"\nconst Database = require\\('better-sqlite3'\\)\nconst path = require\\('path'\\)\nconst db = new Database\\(path.join\\(__dirname, 'data/abrinay.db'\\)\\)\nconsole.log\\('=== squad_outputs ==='\\)\nconst outputs = db.prepare\\('SELECT run_id, agent_name, output_type, status FROM squad_outputs ORDER BY created_at'\\).all\\(\\)\noutputs.forEach\\(r => console.log\\(' ', r.agent_name.padEnd\\(10\\), r.output_type.padEnd\\(20\\), r.status\\)\\)\nconsole.log\\(\\)\nconsole.log\\('=== content_history ==='\\)\nconst history = db.prepare\\('SELECT plataforma, formato, titulo, status, score_general, score_ctr FROM content_history'\\).all\\(\\)\nhistory.forEach\\(r => console.log\\(' ', r.plataforma.padEnd\\(12\\), r.formato.padEnd\\(12\\), r.status, 'score:', r.score_general, r.score_ctr ? 'ctr:'+r.score_ctr+'%' : ''\\)\\)\n\" 2>&1)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY/apps/office-3d\" && npx tsc --noEmit 2>&1)",
+      "Bash(cd \"/c/Users/MIPC/Desktop/DESARROLLOS/MULTI AGENTES de ABRINAY/apps/office-3d\" && npx vite build 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\MIPC\\\\Desktop\\\\DESARROLLOS\\\\MULTI AGENTES de ABRINAY\" && npx tsc --noEmit -p apps/office-3d/tsconfig.json 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\MIPC\\\\Desktop\\\\DESARROLLOS\\\\MULTI AGENTES de ABRINAY\" && npx vite build apps/office-3d 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\MIPC\\\\Desktop\\\\DESARROLLOS\\\\MULTI AGENTES de ABRINAY\" && npx tsc --noEmit -p apps/agent-system/tsconfig.json 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\MIPC\\\\Desktop\\\\DESARROLLOS\\\\MULTI AGENTES de ABRINAY\" && npx tsc --noEmit -p apps/agent-system/tsconfig.json 2>&1 && npx tsc --noEmit -p apps/office-3d/tsconfig.json 2>&1)"
+    ]
+  }
+}

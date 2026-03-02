@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.env
+apps/agent-system/data/*.db
+apps/agent-system/data/*.db-shm
+apps/agent-system/data/*.db-wal
+*.db-shm
+*.db-wal
+.DS_Store
+
+# Claude Code worktrees (temporales, no pertenecen al repo)
+.claude/worktrees/
+
+# Logs
+logs/
+*.log
+
+# Build outputs
+build/
+.vite/
