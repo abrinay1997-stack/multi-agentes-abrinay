@@ -1,0 +1,56 @@
+name: Deploy Frontend → GitHub Pages
+
+# Se dispara en cada push a master que toque el frontend o los tipos compartidos
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'apps/office-3d/**'
+      - 'packages/shared-types/**'
+      - '.github/workflows/deploy.yml'
+
+# Permiso de escritura necesario para que peaceiris/actions-gh-pages
+# pueda forzar-push a la rama gh-pages
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias del workspace
+        run: npm ci
+
+      - name: Build frontend (Vite)
+        # VITE_BASE_PATH: subdirectorio del repo en GitHub Pages
+        # VITE_API_URL:   URL del backend en Railway (sin /api al final)
+        #                 Ej: https://multi-agentes-abrinay.up.railway.app
+        # VITE_WS_URL:    URL WebSocket del backend en Railway
+        #                 Ej: wss://multi-agentes-abrinay.up.railway.app/ws
+        #
+        # VITE_API_URL y VITE_WS_URL se configuran en:
+        # GitHub → Settings → Secrets and variables → Actions → New repository secret
+        # (si no están configurados el frontend arranca en modo offline, que es válido)
+        run: npm run build -w apps/office-3d
+        env:
+          VITE_BASE_PATH: '/multi-agentes-abrinay/'
+          VITE_API_URL:   ${{ secrets.VITE_API_URL }}
+          VITE_WS_URL:    ${{ secrets.VITE_WS_URL }}
+
+      - name: Deploy a rama gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./apps/office-3d/dist
+          # Fuerza-push a gh-pages — no acumula historial de builds
+          force_orphan: true

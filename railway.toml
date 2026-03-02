@@ -1,0 +1,23 @@
+# Railway deployment — backend Node.js
+# Docs: https://docs.railway.app/reference/config-as-code
+#
+# Variables de entorno a configurar en el dashboard de Railway:
+#   ANTHROPIC_API_KEY   → console.anthropic.com
+#   TAVILY_API_KEY      → tavily.com
+#   RESEND_API_KEY      → resend.com
+#   RESEND_FROM_EMAIL   → tu dominio verificado en Resend
+#   NODE_ENV            → production
+#
+# Railway inyecta $PORT automáticamente — el código lo lee en index.ts.
+# NO necesitas configurar PORT manualmente.
+
+[build]
+# 1. Instalar todas las dependencias del workspace
+# 2. Compilar TypeScript del backend → dist/
+buildCommand = "npm ci && npm run build -w apps/agent-system"
+
+[deploy]
+# node dist/index.js vía el script "start" del package.json del backend
+startCommand = "npm run start -w apps/agent-system"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

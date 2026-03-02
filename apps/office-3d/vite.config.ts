@@ -2,6 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  // VITE_BASE_PATH se inyecta desde GitHub Actions para GitHub Pages.
+  // Dev y Railway: vacío → '/' → rutas absolutas normales.
+  // GitHub Pages: '/multi-agentes-abrinay/' → assets cargan desde el subdirectorio correcto.
+  base: process.env.VITE_BASE_PATH ?? '/',
   plugins: [react()],
   server: {
     port: 5173,

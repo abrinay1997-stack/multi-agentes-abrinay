@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws'
-import { config } from '../config'
+import type { Server } from 'http'
 import type { AgentEvent } from '@abrinay/shared-types'
 
 let wss: WebSocketServer | null = null
@@ -14,10 +14,13 @@ let latestStartEvent: AgentEvent | null = null
 let latestProgressEvent: AgentEvent | null = null
 let latestCompleteEvent: AgentEvent | null = null
 
-export function startWsServer(): WebSocketServer {
+// httpServer: el servidor HTTP de Express ya creado.
+// Railway (y cualquier PaaS) expone UN solo puerto por servicio —
+// adjuntar WS al mismo servidor evita necesitar un segundo puerto.
+export function startWsServer(httpServer: Server): WebSocketServer {
   if (wss) return wss
 
-  wss = new WebSocketServer({ port: config.WS_PORT })
+  wss = new WebSocketServer({ server: httpServer, path: '/ws' })
 
   wss.on('connection', (ws) => {
     clients.add(ws)
@@ -51,7 +54,7 @@ export function startWsServer(): WebSocketServer {
     console.error('[ws] Error del servidor:', err.message)
   })
 
-  console.log(`[ws] WebSocket server en puerto ${config.WS_PORT}`)
+  console.log(`[ws] WebSocket server en /ws (comparte puerto HTTP)`)
   return wss
 }
 

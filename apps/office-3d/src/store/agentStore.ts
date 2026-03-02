@@ -4,8 +4,9 @@ import type { AgentEvent, AgentName, AgentStatus, CharacterName, RunSummary } fr
 import { DELIVERY_TARGETS, QA_REVISION_TARGETS } from '../characters/movements'
 import { AGENT_POSITIONS } from '../characters/positions'
 
-// Paths relativos — el proxy de Vite los redirige a :3001 en dev
-const API_BASE = '/api'
+// En dev: VITE_API_URL no existe → '' → '/api' usa el proxy de Vite → :3001
+// En prod (GitHub Pages): VITE_API_URL='https://backend.railway.app' → llamada directa
+const API_BASE = (import.meta.env.VITE_API_URL ?? '') + '/api'
 
 // Mirror del schema backend (camelCase)
 export interface AgentConfig {
