@@ -25,12 +25,17 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Herramientas necesarias para compilar módulos nativos (better-sqlite3 → C++ via node-gyp)
+# Alpine no las incluye por defecto; sin ellas el .node binding no se genera y el server crashea
+RUN apk add --no-cache python3 make g++
+
 # Solo producción deps del backend
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/packages/shared-types/package*.json ./packages/shared-types/
 COPY --from=builder /app/apps/agent-system/package*.json ./apps/agent-system/
 
-RUN npm ci --omit=dev --ignore-scripts
+# Sin --ignore-scripts: permite que better-sqlite3 descargue/compile su binding nativo
+RUN npm ci --omit=dev
 
 # Artefactos de build
 COPY --from=builder /app/apps/agent-system/dist ./apps/agent-system/dist
