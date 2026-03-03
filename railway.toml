@@ -14,6 +14,7 @@
 [build]
 # 1. Instalar todas las dependencias del workspace
 # 2. Compilar TypeScript del backend → dist/
+# shared-types no tiene build script — tsc de agent-system la compila directamente
 buildCommand = "npm ci && npm run build -w apps/agent-system"
 
 [deploy]

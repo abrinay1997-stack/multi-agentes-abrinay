@@ -15,10 +15,9 @@ COPY tsconfig.base.json ./
 COPY packages/ ./packages/
 COPY apps/ ./apps/
 
-# Build: shared-types → agent-system → office-3d
-RUN npm run build -w packages/shared-types
+# shared-types no tiene build propio — tsc de agent-system la compila como fuente TS
+# office-3d se despliega en GitHub Pages, no se necesita aquí
 RUN npm run build -w apps/agent-system
-RUN npm run build -w apps/office-3d
 
 # ─── Stage 2: runtime ────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
@@ -35,14 +34,12 @@ RUN npm ci --omit=dev --ignore-scripts
 
 # Artefactos de build
 COPY --from=builder /app/apps/agent-system/dist ./apps/agent-system/dist
-COPY --from=builder /app/apps/office-3d/dist ./apps/office-3d/dist
 COPY --from=builder /app/packages/shared-types/src ./packages/shared-types/src
 
 # Directorio de datos (SQLite)
 RUN mkdir -p /app/apps/agent-system/data
 
-# El backend sirve también el frontend estático en producción
+# Puerto único: HTTP + WS comparten el mismo puerto (Railway asigna $PORT)
 EXPOSE 3001
-EXPOSE 8080
 
 CMD ["node", "apps/agent-system/dist/index.js"]
